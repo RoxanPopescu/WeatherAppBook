@@ -30,12 +30,6 @@ class MainActivity : AppCompatActivity() {
 
         val forecastList = findViewById<RecyclerView>(R.id.forecast_list)
         forecastList.layoutManager = LinearLayoutManager(this)
-        forecastList.adapter = ForecastListAdapter(items)
-
-        //Anko library providea a DSL to deal with asynchrony - a doAsync function
-        //that executes the code in another thread with the option to return
-        // to main tread by calling uiThread
-
         val url = "http://api.openweathermap.org/data/2.5/forecast/daily?APPID=15646a06818f61f7b8d7823ca833e1ce&zip=94043&mode=json&units=metric&cnt=7"
 
         doAsync{
