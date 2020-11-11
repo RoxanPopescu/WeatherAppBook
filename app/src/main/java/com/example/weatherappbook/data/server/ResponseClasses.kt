@@ -1,4 +1,4 @@
-package com.example.weatherappbook.data
+package com.example.weatherappbook.data.server
 
 
 data class ForecastResult(val city: City, val list: List<Forecast>)

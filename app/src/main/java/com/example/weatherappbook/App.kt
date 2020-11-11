@@ -1,7 +1,7 @@
 package com.example.weatherappbook
 
 import android.app.Application
-import com.example.weatherappbook.utils.DelegatesExt
+import com.example.weatherappbook.extensions.DelegatesExt
 
 class App : Application() {
 
