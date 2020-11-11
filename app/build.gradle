@@ -38,6 +38,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     // add anko dependency
     implementation "org.jetbrains.anko:anko-common:$anko_version"
+    implementation "org.jetbrains.anko:anko-sqlite:$anko_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
