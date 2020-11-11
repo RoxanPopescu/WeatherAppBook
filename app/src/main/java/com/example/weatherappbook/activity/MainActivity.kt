@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherappbook.R
 import com.example.weatherappbook.adapters.ForecastListAdapter
 import com.example.weatherappbook.domain.commands.RequestForecastCommand
+import com.example.weatherappbook.domain.model.Forecast
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity() {
@@ -19,9 +21,16 @@ class MainActivity : AppCompatActivity() {
         val forecastList = findViewById<RecyclerView>(R.id.forecast_list)
         forecastList.layoutManager = LinearLayoutManager(this)
 
-        doAsync{
-            val result =  RequestForecastCommand("94043").execute()
-            uiThread{ forecastList.adapter = ForecastListAdapter(result)}
+        doAsync {
+            val result = RequestForecastCommand("94043").execute()
+            uiThread {
+                forecastList.adapter = ForecastListAdapter(result,
+                    object : ForecastListAdapter.OnItemClickListener {
+                        override fun invoke(forecast: Forecast) {
+                            toast(forecast.date)
+                        }
+                    })
+            }
         }
     }
 }
