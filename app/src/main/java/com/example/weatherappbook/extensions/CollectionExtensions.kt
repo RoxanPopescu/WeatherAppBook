@@ -1,4 +1,4 @@
-package com.example.weatherappbook.extensionsl
+package com.example.weatherappbook.extensions
 
 fun <K, V : Any> Map<K, V?>.toVarargArray(): Array<out Pair<K, V>> =
     map { Pair(it.key, it.value!!) }.toTypedArray()

@@ -4,7 +4,7 @@ import com.example.weatherappbook.data.db.ForecastDb
 import com.example.weatherappbook.data.server.ForecastServer
 import com.example.weatherappbook.domain.model.Forecast
 import com.example.weatherappbook.domain.model.ForecastList
-import com.example.weatherappbook.extensionsl.firstResult
+import com.example.weatherappbook.extensions.firstResult
 
 class ForecastProvider(private val sources: List<ForecastDataSource> = SOURCES) {
     companion object {

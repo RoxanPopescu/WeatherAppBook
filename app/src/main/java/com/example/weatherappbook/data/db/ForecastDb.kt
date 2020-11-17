@@ -6,7 +6,7 @@ import com.example.weatherappbook.extensions.byId
 import com.example.weatherappbook.extensions.clear
 import com.example.weatherappbook.extensions.parseList
 import com.example.weatherappbook.extensions.parseOpt
-import com.example.weatherappbook.extensionsl.toVarargArray
+import com.example.weatherappbook.extensions.toVarargArray
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 
@@ -26,13 +26,16 @@ class ForecastDb(
             .whereSimple("${CityForecastTable.ID} = ?", zipCode.toString())
             .parseOpt { CityForecast(HashMap(it), dailyForecast) }
 
-        if (city != null) dataMapper.convertToDomain(city) else null
+        //if (city != null) dataMapper.convertToDomain(city) else null
+        city?.let { dataMapper.convertToDomain(it) }
     }
 
     override fun requestDayForecast(id: Long) = forecastDbHelper.use {
-        val forecast = select(DayForecastTable.NAME).byId(id).parseOpt { DayForecast(HashMap(it)) }
+        val forecast = select(DayForecastTable.NAME).byId(id).parseOpt {
+            DayForecast(HashMap(it)) }
 
-        if (forecast != null) dataMapper.convertDayToDomain(forecast) else null
+       // if (forecast != null) dataMapper.convertDayToDomain(forecast) else null
+        forecast?.let { dataMapper.convertDayToDomain(it) }
     }
 
     fun saveForecast(forecast: ForecastList) = forecastDbHelper.use {
