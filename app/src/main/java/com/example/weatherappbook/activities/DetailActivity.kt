@@ -1,8 +1,9 @@
-package com.example.weatherappbook.activity
+package com.example.weatherappbook.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherappbook.R
 import com.example.weatherappbook.domain.commands.RequestDayForecastCommand
@@ -16,10 +17,13 @@ import kotlinx.android.synthetic.main.item_forecast.icon
 import kotlinx.android.synthetic.main.item_forecast.maxTemperature
 import kotlinx.android.synthetic.main.item_forecast.minTemperature
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.find
 import org.jetbrains.anko.uiThread
 import java.text.DateFormat
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity(), ToolbarManager {
+
+    override val toolbar by lazy { find<Toolbar>(R.id.toolbar) }
 
     companion object {
         const val ID = "DetailActivity:id"
@@ -29,18 +33,29 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            initToolbar()
+        }
 
-        title = intent.getStringExtra(CITY_NAME)
+        toolbarTitle = intent.getStringExtra(CITY_NAME)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            enableHomeAsUp { onBackPressed() }
+        }
 
         doAsync {
-            val result = RequestDayForecastCommand(intent.getLongExtra(ID, -1)).execute()
+            val result = RequestDayForecastCommand(
+                intent.getLongExtra(ID, -1)
+            )
+                .execute()
             uiThread { bindForecast(result) }
         }
     }
 
     private fun bindForecast(forecast: Forecast) = with(forecast) {
         Picasso.with(this@DetailActivity).load(iconUrl).into(icon)
-        supportActionBar?.subtitle = date.toDateString(DateFormat.FULL)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.subtitle = date.toDateString(DateFormat.FULL)
+        }
         weatherDescription.text = description
         bindWeather(high to maxTemperature, low to minTemperature)
     }
