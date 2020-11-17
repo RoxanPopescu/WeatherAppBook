@@ -1,15 +1,16 @@
 package com.example.weatherappbook.domain.commands
 
-import com.example.weatherappbook.data.server.ForecastRequest
-import com.example.weatherappbook.domain.mappers.ForecastDataMapper
+import com.example.weatherappbook.domain.datasource.ForecastProvider
 import com.example.weatherappbook.domain.model.ForecastList
 
-class RequestForecastCommand(private val zipCode: Long) : Command<ForecastList> {
+class RequestForecastCommand(
+    private val zipCode: Long,
+    private val forecastProvider: ForecastProvider = ForecastProvider()) :
+    Command<ForecastList> {
 
-    override fun execute(): ForecastList {
-        val forecastRequest = ForecastRequest(zipCode)
-        return ForecastDataMapper().convertFromDataModel(
-            zipCode, forecastRequest.execute()
-        )
+    companion object {
+        const val DAYS = 7
     }
+
+    override fun execute(): ForecastList = forecastProvider.requestByZipCode(zipCode, DAYS)
 }

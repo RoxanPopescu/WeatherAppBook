@@ -3,7 +3,10 @@ package com.example.weatherappbook.data.server
 import com.google.gson.Gson
 import java.net.URL
 
-class ForecastRequest(private val zipCode: Long) {
+class ForecastByZipCodeRequest(
+    private val zipCode: Long,
+    val gson: Gson = Gson()
+) {
     companion object {
         private const val APP_ID = "15646a06818f61f7b8d7823ca833e1ce"
         private const val URL =
@@ -13,6 +16,6 @@ class ForecastRequest(private val zipCode: Long) {
 
     fun execute(): ForecastResult {
         val forecastJsonStr = URL(COMPLETE_URL + zipCode).readText()
-        return Gson().fromJson(forecastJsonStr, ForecastResult::class.java)
+        return gson.fromJson(forecastJsonStr, ForecastResult::class.java)
     }
 }
