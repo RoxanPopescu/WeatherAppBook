@@ -2,6 +2,7 @@ package com.example.weatherappbook.data.db
 
 import com.example.weatherappbook.domain.datasource.ForecastDataSource
 import com.example.weatherappbook.domain.model.ForecastList
+import com.example.weatherappbook.extensions.byId
 import com.example.weatherappbook.extensions.clear
 import com.example.weatherappbook.extensions.parseList
 import com.example.weatherappbook.extensions.parseOpt
@@ -26,6 +27,12 @@ class ForecastDb(
             .parseOpt { CityForecast(HashMap(it), dailyForecast) }
 
         if (city != null) dataMapper.convertToDomain(city) else null
+    }
+
+    override fun requestDayForecast(id: Long) = forecastDbHelper.use {
+        val forecast = select(DayForecastTable.NAME).byId(id).parseOpt { DayForecast(HashMap(it)) }
+
+        if (forecast != null) dataMapper.convertDayToDomain(forecast) else null
     }
 
     fun saveForecast(forecast: ForecastList) = forecastDbHelper.use {
