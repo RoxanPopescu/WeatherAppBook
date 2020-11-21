@@ -16,12 +16,13 @@ import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.item_forecast.icon
 import kotlinx.android.synthetic.main.item_forecast.maxTemperature
 import kotlinx.android.synthetic.main.item_forecast.minTemperature
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import org.jetbrains.anko.uiThread
 import java.text.DateFormat
 
-class DetailActivity : AppCompatActivity(), ToolbarManager {
+class DetailActivity : CoroutineScopeActivity(), ToolbarManager {
 
     override val toolbar by lazy { find<Toolbar>(R.id.toolbar) }
 
@@ -42,12 +43,10 @@ class DetailActivity : AppCompatActivity(), ToolbarManager {
             enableHomeAsUp { onBackPressed() }
         }
 
-        doAsync {
-            val result = RequestDayForecastCommand(
-                intent.getLongExtra(ID, -1)
-            )
-                .execute()
-            uiThread { bindForecast(result) }
+        launch {
+            val id = intent.getLongExtra(ID, -1)
+            val result = RequestDayForecastCommand(id).execute()
+            bindForecast(result)
         }
     }
 

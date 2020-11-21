@@ -1,5 +1,5 @@
 package com.example.weatherappbook.domain.commands
 
 interface Command<out T> {
-    fun execute(): T
+    suspend fun execute(): T
 }
